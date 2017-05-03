@@ -30,7 +30,6 @@ state = 'N'
 def disable_led(data, signal, signal_data):
     global state
     weechat.prnt("Disabling LED: ", "Disable LED...")
-    send_rest_message('N')
     if state != 'N':
         send_rest_message('N')
         state = 'N'
