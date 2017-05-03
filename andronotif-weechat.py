@@ -29,12 +29,11 @@ state = 'N'
 # Functions
 def disable_led(data, signal, signal_data):
     global state
-    weechat.prnt("Disabling LED: ", "Disable LED...")
     if state != 'N':
+        weechat.prnt("Disabling LED: ", "Disable LED...")
         send_rest_message('N')
         state = 'N'
     return weechat.WEECHAT_RC_OK
-
 
 
 def enable_led(data, bufferp, uber_empty, tagsn, isdisplayed, ishilight,
@@ -42,16 +41,19 @@ def enable_led(data, bufferp, uber_empty, tagsn, isdisplayed, ishilight,
     global state
     mynick = weechat.buffer_get_string(bufferp,"localvar_nick")
     # Verify it was a private message and we are not the sender.
-    if weechat.buffer_get_string(bufferp,
-           "localvar_type") == "private" and weechat.buffer_get_string(
-            bufferp, "localvar_nick") != prefix:
-        send_rest_message('Y')
-        state = 'Y'
-    if int(ishilight):
-        (weechat.buffer_get_string(bufferp, "short_name") or
-                weechat.buffer_get_string(bufferp, "name"))
-        send_rest_message('Y')
-        state = 'Y'
+    if state == 'N':
+        if weechat.buffer_get_string(bufferp,
+               "localvar_type") == "private" and weechat.buffer_get_string(
+                bufferp, "localvar_nick") != prefix:
+            send_rest_message('Y')
+            state = 'Y'
+        if int(ishilight):
+            (weechat.buffer_get_string(bufferp, "short_name") or
+                    weechat.buffer_get_string(bufferp, "name"))
+            send_rest_message('Y')
+            state = 'Y'
+    else:
+        weechat.prnt("", "LED is already active, ignoring...")
     return weechat.WEECHAT_RC_OK
 
 
