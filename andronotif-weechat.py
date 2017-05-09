@@ -10,6 +10,9 @@ SCRIPT_LICENSE = "GPL"
 SCRIPT_DESC = "Send signal to Teensy to light up Android figurine " \
               "when hilighted or private message."
 
+HOST="70.121.140.185"
+PORT="9001"
+
 # make sure we're run under weechat.
 import_ok = True
 try:
@@ -72,8 +75,8 @@ def send_rest_message(data):
     try:
         weechat.prnt("Connecting:", "Trying to connect to endpoint... ")
         option = 'enable' if data == 'Y' else 'disable'
-        r = requests.get("http://70.121.140.185:9001/{option}".format(
-            option=option))
+        r = requests.get("http://{host}:{port}/{option}".format(
+            host=HOST, port=PORT, option=option))
         weechat.prnt("Sent request for {data}, status: ".format(data=data),
                      str(r.status_code))
     except Exception as e:
